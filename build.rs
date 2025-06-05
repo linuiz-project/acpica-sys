@@ -6,7 +6,7 @@ fn main() {
     println!("cargo:rustc-link-lib=acpica");
 
     let bindings = bindgen::Builder::default()
-        .header("wrapper.h")
+        .header("c_headers/wrapper.h")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .expect("failed to generate bindings");
