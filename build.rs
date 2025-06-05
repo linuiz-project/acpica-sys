@@ -79,19 +79,18 @@ fn compile_acpica(temp_dir: &TempDir) {
         .files({
             std::fs::read_dir(temp_dir.path().join("source/components/"))
                 .expect("source directory should contains a `components` sub-directory")
+                .map(|component_dir| component_dir.expect("could not read component directory"))
                 .flat_map(|component_dir| {
-                    let component_dir = component_dir.expect("could not read component directory");
-
                     std::fs::read_dir(component_dir.path())
                         .expect("failed to read the files within the component directory")
                         .map(|c_file| {
                             c_file.expect("failed to read C file from component directory")
                         })
-                        // // Exclude the debugger and disassembler dirs because they give 'undefined type' errors
-                        // .filter(|c_file| {
-                        //     ![OsString::from("debugger"), OsString::from("disassembler")]
-                        //         .contains(&c_file.file_name())
-                        // })
+                        // Exclude the debugger and disassembler dirs because they give 'undefined type' errors
+                        .filter(|c_file| {
+                            ![OsString::from("debugger"), OsString::from("disassembler")]
+                                .contains(&c_file.file_name())
+                        })
                         .map(|c_file| {
                             println!("cargo:warning=adding component: {:?}", c_file.path());
                             c_file.path()
