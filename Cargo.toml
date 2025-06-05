@@ -1,6 +1,6 @@
 [package]
 name = "acpica-sys"
-version = "0.1.0"
+version = "2025.4.4"
 edition = "2024"
 
 [build-dependencies]
